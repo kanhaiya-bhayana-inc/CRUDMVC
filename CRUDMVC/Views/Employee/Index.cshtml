@@ -1,0 +1,37 @@
+﻿@model List<CRUDMVC.Models.EmployeeTbl>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2 class="mt-5 pd-5">List of All Employees</h2>
+
+<a href="@Url.Action("Create", "Employee")" class="btn btn-primary mt-3">Add Employee</a>
+
+<table class="table table-bordered table-striped table-hover mt-3">
+    <tr>
+        <th>EmployeeId</th>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Operations</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Full_Name</td>
+            <td>@item.Email</td>
+            <td>@item.Phone</td>
+            <td>@item.Address</td>
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", "Employee", new { @id = item.Id }, new { htmlAttributes = new { @class = "" } })*@
+                <a href="@Url.Action("Edit", "Employee", new { @id =item.Id })" class="btn btn-primary">Edit</a>
+                <a href="@Url.Action("Delete", "Employee", new { @id=item.Id })" class="btn btn-danger" onclick="return confirm('Are you sure want to delete @item.Full_Name?');">Delete</a>
+                @*@Html.ActionLink("Delete", "Delete", "Employee", new { @id = item.Id }, new { htmlAttributes = new { @class = "btn btn-danger" } })*@
+            </td>
+        </tr>
+    }
+</table>
+
+

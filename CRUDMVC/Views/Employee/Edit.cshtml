@@ -1,0 +1,36 @@
+﻿@model CRUDMVC.Models.EmployeeTbl
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2 class="mt-5 pd-5">Edit @Model.Full_Name</h2>
+
+
+@using (Html.BeginForm("Edit", "Employee", FormMethod.Post))
+{
+    @Html.HiddenFor(Model => Model.Id);
+    <table class="table">
+        <tr>
+            <td>Enter Full Name:</td>
+            <td>@Html.EditorFor(Model => Model.Full_Name, new { htmlAttributes = new { @class = "form-control" } })</td>
+        </tr>
+        <tr>
+            <td>Enter Email:</td>
+            <td>@Html.EditorFor(Model => Model.Email, new { htmlAttributes = new { @class = "form-control" } })</td>
+        </tr>
+        <tr>
+            <td>Enter Phone:</td>
+            <td>@Html.EditorFor(Model => Model.Phone, new { htmlAttributes = new { @class = "form-control" } })</td>
+        </tr>
+        <tr>
+            <td>Enter Address:</td>
+            <td>@Html.EditorFor(Model => Model.Address, new { htmlAttributes = new { @class = "form-control" } })</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" name="submit" value="Update Employee" class="btn btn-success text-center" />
+            </td>
+        </tr>
+    </table>
+}
+
