@@ -2,13 +2,47 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
+using System.Text.RegularExpressions;
+
 
 namespace CRUDMVC.Controllers
 {
     public class EmployeeController : Controller
     {
+        private static bool IsValid(string email)
+        {
+            var valid = true;
+
+            try
+            {
+                var emailAddress = new MailAddress(email);
+            }
+            catch
+            {
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        private static bool IsPhoneNbr(string number)
+        {
+            const string motif = @"^[0-9]{10}$";
+            if (number != null) return Regex.IsMatch(number, motif);
+            else return false;
+        }
+
+        private static bool IsFullName(string name)
+        {
+            // ([A-Z])\s[A-Z]
+            // [A-Za-z]+\s[A-Za-z]
+            const string regex = @"^[A-Z][a-z]*(\s[A-Z][a-z]*)+$";
+            if (Regex.IsMatch(name, regex)) return true;
+            return false;
+        }
         // GET: Employee
         public ActionResult Index()
         {
@@ -38,6 +72,51 @@ namespace CRUDMVC.Controllers
         {
             try
             {
+                if (String.IsNullOrEmpty(employee.Full_Name))
+                {
+                    ModelState.AddModelError("", "Full Name field is required!");
+                    return View();
+                }
+                if (!IsFullName(employee.Full_Name))
+                {
+                    ModelState.AddModelError("", "Please enter a valid name like <John Smith>!");
+                    return View();
+                }
+                /*if (employee.Full_Name.Any(char.IsDigit))
+                {
+                    ModelState.AddModelError("", "Numbers or digits are not allowed in NAME!");
+                    return View();
+                }*/
+                if (String.IsNullOrEmpty(employee.Email))
+                {
+                    ModelState.AddModelError("", "Email field is required!");
+                    return View();
+                }
+                if(!IsValid(employee.Email))
+                {
+                    ModelState.AddModelError("", "Please Enter valid email address!");
+                    return View();
+                }
+                if (String.IsNullOrEmpty(employee.Phone))
+                {
+                    ModelState.AddModelError("", "Phone field is required!");
+                    return View();
+                }
+               /* if (employee.Phone.Any(char.IsLetter))
+                {
+                    ModelState.AddModelError("", "Character or letters are not allowed in Phone!");
+                    return View();
+                }*/
+               if (!IsPhoneNbr(employee.Phone))
+                {
+                    ModelState.AddModelError("", "Please enter a valid phone number!");
+                    return View();
+                }
+                if (String.IsNullOrEmpty(employee.Address))
+                {
+                    ModelState.AddModelError("", "Address field is required!");
+                    return View();
+                }
 
                 // TODO: Add insert logic here 
                 using (EmployeeDbEntities db = new EmployeeDbEntities())
